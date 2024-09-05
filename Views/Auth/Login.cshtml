@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Auth/_Layout.cshtml";
+}
+
+@model dotnetdev_assessment.Models.ViewModels.AuthLoginViewModel
+
+<div class="container-fluid">
+    <form id="loginForm"  method="post" class="card mx-auto mt-5" style="max-width: 500px">
+         <div class="card-body">
+            <h4>Sign In</h4>
+            <div class="mb-1">
+                <label>Username</label>
+                <input name="Username" id="username" required type="text" class="form-control form-control-sm" placeholder="Username"  />
+            </div>
+            
+            <div class="mb-1">
+                <label>Password</label>
+                <input name="Password" id="password" required class="form-control form-control-sm" type="password" placeholder="Password" />
+            </div>
+         </div>
+         <div class="card-footer">
+             <button onclick="submitLogin()" type="button" class="btn btn-primary ms-auto me-0 d-block">Sign In</button>
+         </div>
+    </form>
+</div>
+<script>
+    function submitLogin() {
+        const username = $("#username").val();
+        const password = $("#password").val();
+        $.post("/auth/login", { username: username, password: password })
+            .done(token => {
+                sessionStorage.setItem("jwtToken", token);
+                location.href = "/"
+            })
+            .fail(res => {
+                alert(res.statusText)
+            });
+    }
+</script>
