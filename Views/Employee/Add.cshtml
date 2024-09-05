@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<form class="card mx-auto" style="max-width: 500px;">
+    <div class="card-body">
+        <h3>Add Employee</h3>
+
+        <div class="mb-2">
+            <label>Username</label>
+            <input name="Username" id="Username" type="text" class="form-control" required />
+        </div>
+
+        <div class="mb-2">
+            <label>Password</label>
+            <input name="Password" id="Password" type="password" class="form-control" required />
+        </div>
+
+        <div class="mb-2">
+            <label>Username</label>
+            <input name="Name" type="text" id="Name" class="form-control" required />
+        </div>
+
+        <div class="mb-2">
+            <label>Department</label>
+            <input name="Department" id="Department" type="text" class="form-control" required />
+        </div>
+
+        <div class="mb-2">
+            <label>Position</label>
+            <input name="Position" id="Position" type="text" class="form-control" required />
+        </div>
+
+        <div class="mb-2 form-check">
+            <input name="IsAdmin" id="IsAdmin" type="checkbox" class="form-check-input" placeholder="Is Admin"  required/>
+            <label class="form-check-label" for="IsAdmin">Is Admin?</label>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary d-block ms-auto me-0" type="button" onclick="AddEmployee()" >Save</button>
+    </div>
+</form>
+
+<script>
+    function AddEmployee(){
+        const Username = $("#Username").val();
+        const Password = $("#Password").val();
+        const Name = $("#Name").val();
+        const Department = $("#Department").val();
+        const Position = $("#Position").val();
+        const IsAdmin = $("#IsAdmin").is(':checked');
+        const data = {
+            Username : Username,
+            Password : Password,
+            Name : Name,
+            Department : Department,
+            Position : Position,
+            IsAdmin : IsAdmin
+        }
+        console.log(data)
+        $.post("/employees/add", data)
+        .done(res => {
+            location.href = "/employees"
+        })
+        .fail(res => {
+            console.log(res)
+            if(res.status == 422){
+                alert(res.responseText)
+                return
+            }
+            alert("Something went wrong while processing the request")
+        })
+    }
+</script>
+

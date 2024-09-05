@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Edit Employee";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@model dotnetdev_assessment.Models.Entities.Employee
+<form class="card mx-auto" style="max-width: 500px;">
+    <div class="card-body">
+        <h3>Update Employee</h3>
+
+        <div class="mb-2">
+            <label>Username</label>
+            <input name="Username" id="Username" type="text" class="form-control" required value="@Model.Username" />
+        </div>
+
+        <div class="mb-2">
+            <label>Name</label>
+            <input name="Name" type="text" id="Name" class="form-control" required value="@Model.Name" />
+        </div>
+
+        <div class="mb-2">
+            <label>Department</label>
+            <input name="Department" id="Department" type="text" class="form-control" required value="@Model.Department" />
+        </div>
+
+        <div class="mb-2">
+            <label>Position</label>
+            <input name="Position" id="Position" type="text" class="form-control" required value="@Model.Position" />
+        </div>
+
+        <div class="mb-2 form-check">
+            <input name="IsAdmin" id="IsAdmin" type="checkbox" class="form-check-input" placeholder="Is Admin" required checked="@Model.IsAdmin" />
+            <label class="form-check-label" for="IsAdmin">Is Admin?</label>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary d-block ms-auto me-0" type="button" onclick="UpdateEmployee()">Save</button>
+    </div>
+</form>
+
+<script>
+    function UpdateEmployee(){
+        const Username = $("#Username").val();
+        const Name = $("#Name").val();
+        const Department = $("#Department").val();
+        const Position = $("#Position").val();
+        const IsAdmin = $("#IsAdmin").is(':checked');
+        const data = {
+            Username : Username,
+            Name : Name,
+            Department : Department,
+            Position : Position,
+            IsAdmin : IsAdmin
+        }
+        console.log(data)
+        $.post("/employees/edit", data)
+        .done(res => {
+            location.href = "/employees"
+        })
+        .fail(res => {
+            console.log(res)
+            if(res.status == 422){
+                alert(res.responseText)
+                return
+            }
+            alert("Something went wrong while processing the request")
+        })
+    }
+</script>
+

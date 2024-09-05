@@ -1,4 +1,5 @@
 using dotnetdev_assessment.Identity;
+using dotnetdev_assessment.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -11,8 +12,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>();
 
 // Add Services
-
-// Add repositories
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
 // Get JWT settings from appsettings.json
 var jwtSettings = builder.Configuration.GetSection("Jwt");

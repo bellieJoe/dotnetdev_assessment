@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewData["Title"] = "Employees";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@model IEnumerable<dotnetdev_assessment.Models.Entities.Employee>;
+
+<section>
+    <h1>Employees</h1>
+    <a class="btn btn-primary" href="/employees/add">Add Employee</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">Position</th>
+                <th scope="col">Username</th>
+                <th scope="col">Is Admin</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td scope="row">@e.Name</td>
+                    <td scope="row">@e.Department</td>
+                    <td scope="row">@e.Position</td>
+                    <td scope="row">@e.Username</td>
+                    <td scope="row">@e.IsAdmin</td>
+                    <td>
+                        <a class="btn btn-success" href="/employees/edit/@e.Id">Edit</a>
+                        <button class="btn btn-danger" onclick="deleteEmployee(@e.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+          
+        </tbody>
+    </table>
+</section>
+
+<script>
+    function deleteEmployee(id){
+        $.ajax({
+            url: "/employees/delete/" + id,
+            type: "DELETE",
+            success: res => {
+                location.href = "/employees"
+            },
+            Error: res => {
+                if (res.status == 422) {
+                    alert(res.responseText)
+                    return
+                }
+                alert("Something went wrong while processing the request")
+            }
+        });
+    }
+</script>
+
