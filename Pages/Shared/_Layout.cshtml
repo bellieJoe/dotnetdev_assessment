@@ -24,6 +24,7 @@
                         </li>
                     </ul>
                     <a class="btn btn-primary" asp-controller="Auth" asp-action="Login">Login</a>
+                    <btn class="btn btn-outline-secondary ms-2" onclick="logout()">Logout</btn>
                 </div>
             </div>
         </nav>
@@ -43,6 +44,16 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function navigate(url){
+
+        }
+        function logout(){
+            sessionStorage.clear();
+            document.cookie = "jwtToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=Strict";
+            location.href = "/";
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

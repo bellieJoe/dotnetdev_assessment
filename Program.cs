@@ -1,4 +1,4 @@
-using dotnetdev_assessment.Identity;
+
 using dotnetdev_assessment.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -13,11 +13,13 @@ builder.Services.AddDbContext<ApplicationDbContext>();
 
 // Add Services
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 
 // Get JWT settings from appsettings.json
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
 builder.Services.AddAuthentication();
+
 // Add Authentication service with JWT
 builder.Services.AddAuthentication(options =>
 {
@@ -34,14 +36,26 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var token = context.HttpContext.Request.Cookies["jwtToken"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                context.Token = token;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(IdentityData.AdminUserPolicyName, p => p.RequireClaim(IdentityData.AdminUserClaimName, "true"));
-});
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"))
+    .AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 
 var app = builder.Build();
 

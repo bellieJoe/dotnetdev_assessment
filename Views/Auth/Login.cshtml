@@ -32,6 +32,7 @@
         $.post("/auth/login", { username: username, password: password })
             .done(token => {
                 sessionStorage.setItem("jwtToken", token);
+                document.cookie = `jwtToken=${token}; path=/; Secure; SameSite=Strict`;
                 location.href = "/"
             })
             .fail(res => {

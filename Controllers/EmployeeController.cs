@@ -2,6 +2,7 @@
 using dotnetdev_assessment.Models.Entities;
 using dotnetdev_assessment.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace dotnetdev_assessment.Controllers
 {
@@ -9,19 +10,23 @@ namespace dotnetdev_assessment.Controllers
     public class EmployeeController(IEmployeeService employeeService) : Controller
     {
         private readonly IEmployeeService _employeeService = employeeService;
+
         [Route("")]
+        [Authorize]
         public IActionResult Index()
         {
             return View(_employeeService.GetAll());
         }
 
         [HttpGet("add")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Add(AddEmployee employee)
         {
             if(!ModelState.IsValid)
@@ -34,6 +39,7 @@ namespace dotnetdev_assessment.Controllers
         }
 
         [HttpGet("edit/{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id) 
         {
             Employee? employee = _employeeService.GetById(id);
@@ -43,6 +49,7 @@ namespace dotnetdev_assessment.Controllers
         }
 
         [HttpPost("edit/{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(EditEmployee employee, int id) 
         {
             employee.Id = id;
@@ -54,6 +61,7 @@ namespace dotnetdev_assessment.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id) 
         {
             Employee? employee = _employeeService.GetById(id);

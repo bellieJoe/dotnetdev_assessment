@@ -8,7 +8,8 @@ namespace dotnetdev_assessment.Services
 {
     public interface IAuthService
     {
-        //public string? Authenticate(AuthLoginViewModel loginViewModel);
+        public string? Authenticate(AuthLoginViewModel loginViewModel);
 
+        public string? GenerateJWTToken(int id, string role);
     }
 }
