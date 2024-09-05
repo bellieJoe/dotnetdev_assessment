@@ -14,6 +14,15 @@
 4. After that you can run the server by entering `dotnet run` command on the cli or clicking the play button at the top of Visual Studio.
 5. Open the your browser and access the `localhost:5286` url.
 
+### Default User Accounts From Seeder
+Username: admin
+Password: password
+Role: Admin
+
+Username: user
+Password: password
+Role: User
+
 ## JWT Token
 #### JWT Configuration
 In Implementing JWT Authentication first we need to install the necessary nuget packages such as `Microsoft.AspNetCore.Authentication.JwtBearer` and `System.IdentityModel.Tokens.Jwt`.
