@@ -67,6 +67,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseStatusCodePages(context =>
 {
     var response = context.HttpContext.Response;
