@@ -33,12 +33,12 @@
         </div>
     </div>
     <div class="card-footer">
-        <button class="btn btn-primary d-block ms-auto me-0" type="button" onclick="UpdateEmployee()">Save</button>
+        <button class="btn btn-primary d-block ms-auto me-0" type="button" onclick="UpdateEmployee(@Model.Id)">Save</button>
     </div>
 </form>
 
 <script>
-    function UpdateEmployee(){
+    function UpdateEmployee(id){
         const Username = $("#Username").val();
         const Name = $("#Name").val();
         const Department = $("#Department").val();
@@ -52,17 +52,28 @@
             IsAdmin : IsAdmin
         }
         console.log(data)
-        $.post("/employees/edit", data)
-        .done(res => {
-            location.href = "/employees"
-        })
-        .fail(res => {
-            console.log(res)
-            if(res.status == 422){
-                alert(res.responseText)
-                return
+        $.ajax({
+            url : "/employees/edit/"+id,
+            data : data,
+            type : "PUT",
+            success : res => {
+                    location.href = "/employees"
+            },
+            error : res => {
+                console.log(res)
+                if(res.status == 422){
+                    alert(res.responseText)
+                    return
+                }
+                if(res.status = 401){
+                    alert("Forbidden")
+                    return
+                }
+                if(res.status = 403){
+                    alert("Unauthorized")
+                }
+                alert("Something went wrong while processing the request")
             }
-            alert("Something went wrong while processing the request")
         })
     }
 </script>

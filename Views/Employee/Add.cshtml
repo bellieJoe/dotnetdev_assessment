@@ -70,6 +70,13 @@
                 alert(res.responseText)
                 return
             }
+            if(res.status = 401){
+                alert("Forbidden")
+            return
+            }
+            if(res.status = 403){
+                alert("Unauthorized")
+            }
             alert("Something went wrong while processing the request")
         })
     }

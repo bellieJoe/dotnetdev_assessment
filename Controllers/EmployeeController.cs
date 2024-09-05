@@ -48,7 +48,7 @@ namespace dotnetdev_assessment.Controllers
             return View(employee);
         }
 
-        [HttpPost("edit/{id}")]
+        [HttpPut("edit/{id}")]
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(EditEmployee employee, int id) 
         {
@@ -57,7 +57,7 @@ namespace dotnetdev_assessment.Controllers
                 return UnprocessableEntity();
             if(!_employeeService.UpdateById(employee))
                 return BadRequest();
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         [HttpDelete("delete/{id}")]
@@ -69,7 +69,7 @@ namespace dotnetdev_assessment.Controllers
                 return NotFound();
             if (!_employeeService.DeleteById(employee))
                 return BadRequest();
-            return RedirectToAction("Index");
+            return Ok();
         }
     }
 }

@@ -67,6 +67,20 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePages(context =>
+{
+    var response = context.HttpContext.Response;
+    if (response.StatusCode == 401)
+    {
+        response.Redirect("/errors/unauthorized");
+    }
+    else if (response.StatusCode == 403)
+    {
+        response.Redirect("/errors/forbidden");
+    }
+    return Task.CompletedTask;
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -74,6 +88,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllers();
 
